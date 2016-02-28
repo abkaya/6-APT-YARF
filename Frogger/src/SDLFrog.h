@@ -8,6 +8,7 @@
 #ifndef SRC_SDLFROG_H_
 #define SRC_SDLFROG_H_
 
+
 #include <string>
 #include "Frog.h"
 

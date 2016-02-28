@@ -9,7 +9,11 @@
 #include "SDLFact.h"
 #include "SDLFrog.h"
 #include "Game.h"
+#include <SDL.h>
+#include <stdio.h>
 using namespace std;
+
+#undef main // MAGIC ?
 
 int main()
 {
@@ -25,4 +29,15 @@ int main()
 	F->~Fact();
 
 	cout << "main:\t\tObjects destroyed in opposite order of creation." << endl;
+
+
+
+/*end test
+ *
+ */
+	return 0;
 }
+
+/*Resources for graphics and sound
+ * Public domain resources!
+ */

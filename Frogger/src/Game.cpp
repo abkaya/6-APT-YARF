@@ -31,7 +31,7 @@ void Game::Stop(){
 
 Game::~Game()
 {
-	//Calling the FrogG Destructor in here crashes the program.
+	//Calling the FrogG Destructor in her
 	cout << "Game.~Game():\tDestroyed a Game object" << endl;
 }
 
