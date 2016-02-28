@@ -1,3 +1,10 @@
+/*
+ * calculations.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
+
 //functions definitions
 
 #include "calculations.h"
@@ -58,3 +65,6 @@ void drukrij(int rij[], int aantal)
 		cout << rij[i] << " ";
 	cout << endl;
 }
+
+
+

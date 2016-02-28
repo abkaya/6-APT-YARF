@@ -1,10 +1,13 @@
-//============================================================================
-// Name        : time.h
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - time header including declarations
-//============================================================================
+/*
+ * time.h
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
+
+#ifndef SRC_TIME_H_
+#define SRC_TIME_H_
+
 #include<string>
 using namespace std;
 
@@ -39,3 +42,8 @@ private:
 	int month;
 	int year;
 };
+
+
+
+
+#endif /* SRC_TIME_H_ */

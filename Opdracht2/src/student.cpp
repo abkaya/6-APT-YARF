@@ -1,11 +1,9 @@
-//============================================================================
-// Name        : student.cpp
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - student definitions
-//============================================================================
-
+/*
+ * student.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
 
 #include "student.h"
 #include<iostream>
@@ -60,3 +58,4 @@ float student::Gemiddelde()
 student::~student(void)
 {
 }
+

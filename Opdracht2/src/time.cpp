@@ -1,10 +1,10 @@
-//============================================================================
-// Name        : time.cpp
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - time definitions
-//============================================================================
+/*
+ * time.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
+
 
 #include "time.h"
 #include <iostream>

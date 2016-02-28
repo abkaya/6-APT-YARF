@@ -1,10 +1,13 @@
-//============================================================================
-// Name        : student.h
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - student header including declarations
-//============================================================================
+/*
+ * student.h
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
+
+#ifndef SRC_STUDENT_H_
+#define SRC_STUDENT_H_
+
 
 #include <string>
 using namespace std;
@@ -26,3 +29,8 @@ private:
 	string klas;
 	int punten[3];
 };
+
+
+
+
+#endif /* SRC_STUDENT_H_ */

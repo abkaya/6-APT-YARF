@@ -1,10 +1,9 @@
-//============================================================================
-// Name        : complex.cpp
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - complex definitions
-//============================================================================
+/*
+ * complex.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
 
 #include "student.h"
 #include "complex.h"

@@ -1,10 +1,9 @@
-//============================================================================
-// Name        : main.cpp
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 2 - main
-//============================================================================
+/*
+ * main.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
 
 #include <iostream>
 #include "student.h"
@@ -67,5 +66,6 @@ int main()
 	t6++;
 	cout << t6 << endl;
 
+	cout <<"Done" <<endl;
 	return 0;
 }

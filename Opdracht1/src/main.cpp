@@ -1,10 +1,11 @@
-//============================================================================
-// Name        : Opdracht1.cpp
-// Author      : Abdil Kaya
-// Version     : 1
-// Copyright   : N/A
-// Description : opdracht 1 - calculations
-//============================================================================
+/*
+ * main.cpp
+ *
+ *  Created on: 28 Feb 2016
+ *      Author: abdil
+ */
+
+
 
 #include <iostream>
 #include <algorithm>
@@ -42,4 +43,6 @@ int main()
 
 	return 0;
 }
+
+
 
