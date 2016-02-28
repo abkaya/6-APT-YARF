@@ -9,12 +9,13 @@
 #include<iostream>
 using namespace std;
 
-student::student(){
+student::student()
+{
 	naam = "";
 	klas = "";
-	punten[0]=0;
-	punten[1]=0;
-	punten[2]=0;
+	punten[0] = 0;
+	punten[1] = 0;
+	punten[2] = 0;
 }
 student::student(string init_naam, string init_klas, int p0, int p1, int p2)
 {
