@@ -6,9 +6,6 @@
  */
 
 
-
-#include <iostream>
-
 #include "Frog.h"
 
 using namespace std;

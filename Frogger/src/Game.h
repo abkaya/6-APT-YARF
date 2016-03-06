@@ -9,6 +9,7 @@
 #define SRC_GAME_H_
 #include "Fact.h"
 #include "Frog.h"
+#include "Window.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ public:
 private:
 	Fact* F;
 	Frog* FrogF;
+	Window* WindowF;
 };
 
 #endif /* SRC_GAME_H_ */

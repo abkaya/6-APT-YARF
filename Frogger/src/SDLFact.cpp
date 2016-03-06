@@ -6,19 +6,28 @@
  */
 
 #include <iostream>
-#include "SDLFrog.h"
 #include "SDLFact.h"
+#include "SDLFrog.h"
+#include "SDLWindow.h"
 
 using namespace std;
 
-SDLFact::SDLFact() {
-
+SDLFact::SDLFact()
+{
 }
 
-Frog* SDLFact::CreateFrog() {
+Frog* SDLFact::CreateFrog()
+{
 	return new SDLFrog();
 }
 
-SDLFact::~SDLFact() {
-	cout << "SDLFact.~SDLFact():\n\t\tDestroyed an SDLFact object. [INDIRECT]" << endl;
+Window* SDLFact::CreateWindow()
+{
+	return new SDLWindow();
+}
+
+SDLFact::~SDLFact()
+{
+	cout << "SDLFact.~SDLFact():\n\t\tDestroyed an SDLFact object. [INDIRECT]"
+			<< endl;
 }

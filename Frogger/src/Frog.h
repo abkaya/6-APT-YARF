@@ -9,10 +9,11 @@
 #define SRC_FROG_H_
 
 #include <string>
-
+#include <iostream>
 using namespace std;
 
-class Frog {
+class Frog
+{
 public:
 	Frog();
 	virtual void Vis()=0;

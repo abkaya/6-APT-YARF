@@ -11,14 +11,16 @@
 #include <string>
 #include "Fact.h"
 #include "Frog.h"
+#include "Window.h"
 
-using namespace std;
 
 // Extend class Fact to the extent of its possibilities. Public will be public, but privates remain private and so on.
-class SDLFact: public Fact {
+class SDLFact: public Fact
+{
 public:
 	SDLFact();
 	Frog* CreateFrog();
+	Window* CreateWindow();
 	virtual ~SDLFact();
 };
 

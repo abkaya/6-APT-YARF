@@ -9,8 +9,8 @@
 #define SRC_FACT_H_
 
 #include <string>
-
 #include "Frog.h"
+#include "Window.h"
 using namespace std;
 
 class Fact
@@ -18,6 +18,7 @@ class Fact
 public:
 	Fact();
 	virtual Frog* CreateFrog()=0;
+	virtual Window* CreateWindow()=0;
 	virtual ~Fact();
 };
 
