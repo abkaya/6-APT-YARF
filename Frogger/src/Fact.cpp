@@ -4,20 +4,18 @@
  *  Created on: 28 Feb 2016
  *      Author: abdil
  */
+
 #include <iostream>
 #include <cmath>
-
 #include "Fact.h"
-using namespace std;
 
+namespace Game
+{
 Fact::Fact()
 {
 }
-
 Fact::~Fact()
 {
 	cout << "Fact.~Fact():\tDestroyed a Fact object. [DIRECT]" << endl;
 }
-
-
-
+}

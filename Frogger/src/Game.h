@@ -9,8 +9,9 @@
 #define SRC_GAME_H_
 #include "Fact.h"
 #include "Frog.h"
-#include "Window.h"
 
+namespace Game
+{
 class Game
 {
 public:
@@ -20,8 +21,12 @@ public:
 	~Game();
 private:
 	Fact* F;
-	Frog* FrogF;
-	Window* WindowF;
-};
+	Frog* FrogF = 0;
 
+	const int FPS;
+	const double DELAY_TIME = 1000 / FPS;
+    double    m_frameStart = 0;
+    double    m_frameTime  = 0;
+};
+}
 #endif /* SRC_GAME_H_ */
