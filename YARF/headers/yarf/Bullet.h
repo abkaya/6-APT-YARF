@@ -25,7 +25,7 @@ public:
 protected:
 	int FPS=60; 	//default | initial behaviour -- is updated almost instantaneously. It's a safe value
 	float theta=0;
-	int radius=0;
+	float radius=0;
 	int initTheta=0; //used to sway between theta degrees.
 	int clockwise=1;
 	Rect *frogRect;
@@ -33,7 +33,7 @@ protected:
 		// Rect to share
 	Rect returnRect;
 
-	float bulletSpeed=0.093;
+	float bulletSpeed=0.07;
 	//direction: 0: north, 1: east, 2: south, 3: west
 	int frogDirection;
 	//double widthScaleFactor;

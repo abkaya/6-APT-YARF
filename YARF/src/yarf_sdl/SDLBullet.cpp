@@ -10,8 +10,8 @@
 namespace yarf_sdl
 {
 SDLBullet::SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
-		SDL_Rect & WindowRect, int window_width, int window_height, double &width_scale_factor,
-		double &height_scale_factor, Rect &frog_position, int frog_direction,
+		SDL_Rect & WindowRect, int window_width, int window_height, float &width_scale_factor,
+		float &height_scale_factor, Rect &frog_position, int frog_direction,
 		int bullet_theta)
 {
 	initTheta = bullet_theta;
@@ -66,8 +66,6 @@ void SDLBullet::ConvertGameToVis() //converts the frog game coords to frog visua
 	bulletDestRect.h = position.h * 160 * (*heightScaleFactor);
 	bulletDestRect.x = position.x * 160 * (*widthScaleFactor);
 	bulletDestRect.y = position.y * 160 * (*heightScaleFactor);
-
-	std::cout<<bulletDestRect.x << " , " << bulletDestRect.y << std::endl;
 }
 
 SDLBullet::~SDLBullet()

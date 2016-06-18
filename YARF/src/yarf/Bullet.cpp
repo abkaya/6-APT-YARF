@@ -48,16 +48,16 @@ void Bullet::Move()
 		// The bullet behaves in such way that it sways between +1degree and -1 degree
 		// of the initial theta m_initTheta.
 		// I have set the bullet to be called from 0 to 360 degrees, every 10 degrees
-		// The result is 36 blue bullet, each swaying +1 and -1 degree, whilst the radius
+		// The result is 36 blue bullet, each swaying +2 and -2 degree, whilst the radius
 		// is growing with the bulletSpeed.
 		// and this is being updated every time Move() is called.
 	case 4:
 		//growing radius
-		radius = radius + bulletSpeed;
+		radius = radius + bulletSpeed/2;
 		//logic for the bullet to know when to sway the other way
-		if (theta > (initTheta + 1) && clockwise == 1)
+		if (theta > (initTheta + 2) && clockwise == 1)
 			clockwise = -1;
-		if (theta < (initTheta - 1) && clockwise == -1)
+		if (theta < (initTheta - 2) && clockwise == -1)
 			clockwise = 1;
 		theta = theta + clockwise;
 		position.x = staticCoords.x + radius * cos(theta * (PI / 180));

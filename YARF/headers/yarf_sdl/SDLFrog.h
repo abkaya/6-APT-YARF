@@ -23,8 +23,8 @@ class SDLFrog: public yarf::Frog
 {
 public:
 	SDLFrog(SDL_Renderer * Renderer, SDL_Texture * Texture,
-			SDL_Rect & m_windowRect, int window_width, int window_height, double &width_scale_factor,
-			double &height_scale_factor, list<yarf::Bullet *> &bullet_list);
+			SDL_Rect & m_windowRect, int window_width, int window_height, float &width_scale_factor,
+			float &height_scale_factor, list<yarf::Bullet *> &bullet_list);
 	void Vis(int direction, int leaping, const int & FPS);
 	void LeapVis(int & direction);
 	void CreateBullet();
@@ -50,8 +50,8 @@ private:
 
 	double windowWidth;
 	double windowHeight;
-	double *m_widthScaleFactor;
-	double *m_heightScaleFactor;
+	float *widthScaleFactor;
+	float *heightScaleFactor;
 
 	// m_leaping can be anywhere
 	int leaping = 0;

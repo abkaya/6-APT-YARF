@@ -28,8 +28,9 @@ class Fact
         virtual ~Fact();
         virtual void InitTextures()=0;
         virtual void InitEntities()=0;
+        virtual Terrain * CreateTerrain() = 0;
+
         virtual yarf::Frog * CreateFrog() = 0;
-        virtual Terrain * CreateBorder() = 0;
         virtual yarf::Frog * GetFrog() = 0;
         virtual void DetectCollision()=0;
         virtual void IsVehicleInTerrain()=0;

@@ -18,7 +18,7 @@ Frog::Frog(){
 void Frog::Kill(){
 	position.theta=0;
 	position.x=gameAxisWidth/2-width/2;
-	position.y=gameAxisHeight-(1/20)*gameAxisHeight;
+	position.y=gameAxisHeight-1.1*width;
 
 }
 

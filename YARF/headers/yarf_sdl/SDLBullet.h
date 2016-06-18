@@ -21,8 +21,8 @@ class SDLBullet: public yarf::Bullet
 {
 public:
 	SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
-			SDL_Rect & m_windowRect, int window_width, int window_height, double &width_scale_factor,
-			double &height_scale_factor, Rect &frog_position, int frog_direction, int bullet_theta);
+			SDL_Rect & m_windowRect, int window_width, int window_height, float &width_scale_factor,
+			float &height_scale_factor, Rect &frog_position, int frog_direction, int bullet_theta);
 	void Vis(const int& FPS);
 	void ConvertGameToVis();
 	virtual ~SDLBullet();
@@ -36,8 +36,8 @@ private:
 
 	double windowWidth;
 	double windowHeight;
-	double *widthScaleFactor;
-	double *heightScaleFactor;
+	float *widthScaleFactor;
+	float *heightScaleFactor;
 	int bulletSrcX = 0;
 	int bulletSrcY = 0;
 	int bulletSrcWidth=12;

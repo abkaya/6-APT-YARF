@@ -24,7 +24,6 @@ public:
 	//pure virtual function | forced interface inheritance
 	virtual void ConvertGameToVis()=0;
 	virtual ~Entity()=0;
-protected:
 	Rect position;
 	float gameAxisWidth=4;
 	float gameAxisHeight=3;

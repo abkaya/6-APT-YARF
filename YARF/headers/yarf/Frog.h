@@ -35,7 +35,7 @@ protected:
 private:
 	Rect testPosition;
 	float width=0.2;
-	float height=0.22;
+	float height=0.1875;
 	float jumpDistance=0.3;
 };
 }

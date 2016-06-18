@@ -18,8 +18,8 @@ SDLFact::SDLFact() :
 {
 	//Initialisation of the window happens here
 	cout << "SDLWindow:\tMake WINDOW IN SDL" << endl;
-	if (Init("YARF | Yet Another Reckless Frog", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-			WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE))
+	if (Init("YARF | Yet Another Reckless Frog", SDL_WINDOWPOS_CENTERED,
+	SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE))
 	{
 		bRunning = true;
 	}
@@ -91,7 +91,7 @@ void SDLFact::InitEntities()
 	windowRect.h = HEIGHT;
 
 	FrogF = CreateFrog();
-	TerrainF = CreateBorder();
+	TerrainF = CreateTerrain();
 
 	//Seeding the random generator in order to generate a random type of car for ever time the program is ran:
 	//This is done using the current time string
@@ -112,8 +112,7 @@ void SDLFact::InitEntities()
 		{
 			vehicle_list.push_back(
 					new SDLVehicle(pRenderer, pTexture, true, i, j,
-							(rand() % 5), WIDTH, HEIGHT, widthScaleFactor,
-							heightScaleFactor));
+							(rand() % 5), widthScaleFactor, heightScaleFactor));
 			//check for colliding cars, because we just created a new vehicle.
 			RemoveCollidingVehicle(true);
 			k++;
@@ -244,6 +243,8 @@ void SDLFact::BulletVehicleCollision()
 					delete (bullet);
 					bullet_list.remove(bullet);
 					collided = true;
+					score+=10;
+					cout << "Score: " << score << endl;
 				}
 			}
 		}
@@ -268,10 +269,8 @@ void SDLFact::SpawnVehicle(int lane)
 	if (IsSpawnAvailable(lane) == true)
 	{
 		vehicle_list.push_back(
-				new SDLVehicle(pRenderer, pTexture, false, lane,
-						static_cast<double>(4 * widthScaleFactor),
-						(rand() % 5), WIDTH, HEIGHT, widthScaleFactor,
-						heightScaleFactor));
+				new SDLVehicle(pRenderer, pTexture, false, lane, -1,
+						(rand() % 5), widthScaleFactor, heightScaleFactor));
 		RemoveCollidingVehicle(false);
 	}
 }
@@ -296,14 +295,14 @@ void SDLFact::ManageVehicleNumber()
 
 yarf::Frog * SDLFact::CreateFrog()
 {
-	return new yarf_sdl::SDLFrog(pRenderer, pTexture, windowRect, WIDTH,
-			HEIGHT, widthScaleFactor, heightScaleFactor, bullet_list);
+	return new yarf_sdl::SDLFrog(pRenderer, pTexture, windowRect, WIDTH, HEIGHT,
+			widthScaleFactor, heightScaleFactor, bullet_list);
 }
 
-Terrain * SDLFact::CreateBorder()
+Terrain * SDLFact::CreateTerrain()
 {
-	return new SDLTerrain(pRenderer, pTexture, WIDTH, HEIGHT,
-			heightScaleFactor, widthScaleFactor);
+	return new SDLTerrain(pRenderer, pTexture, WIDTH, HEIGHT, heightScaleFactor,
+			widthScaleFactor);
 }
 
 yarf::Frog * SDLFact::GetFrog()
@@ -353,14 +352,15 @@ void SDLFact::Render()
 	// clear the window to the RenderDrawColor set in the Init function ^
 	SDL_RenderClear(pRenderer);
 	TerrainF->Vis();
+
 	FrogF->MoveToDirection(m_direction);
 	FrogF->Vis(m_direction, m_leaping, FPS);
-
 
 	for (vehicle_it_1 = vehicle_list.begin();
 			vehicle_it_1 != vehicle_list.end(); ++vehicle_it_1)
 	{
 		(*vehicle_it_1)->Vis(FPS);
+		(*vehicle_it_1)->Move();
 	}
 
 	// show the window
@@ -446,31 +446,32 @@ void SDLFact::HandleEvents()
 void SDLFact::Resize()
 {
 	SDL_SetWindowSize(pWindow, WIDTH, HEIGHT);
-	for (auto* bullet : bullet_list)
-	{
-		delete (bullet);
-		bullet_list.remove(bullet);
-	}
+	/*
+	 for (auto* bullet : bullet_list)
+	 {
+	 delete (bullet);
+	 bullet_list.remove(bullet);
+	 }
 
-	//Try keeping the vehicles intact, but resize on the fly
-	//will temporarily result in a lot of vehicles-- don't worry.
-	//if it works, it works.
+	 //Try keeping the vehicles intact, but resize on the fly
+	 //will temporarily result in a lot of vehicles-- don't worry.
+	 //if it works, it works.
 
-	for (auto* vehicle : vehicle_list)
-	{
-		delete (vehicle);
-		vehicle_list.remove(vehicle);
-	}
+	 for (auto* vehicle : vehicle_list)
+	 {
+	 delete (vehicle);
+	 vehicle_list.remove(vehicle);
+	 }
 
-	delete (FrogF);
+	 delete (FrogF);
+
+	 SDL_SetWindowPosition(pWindow, SDL_WINDOWPOS_CENTERED,
+	 SDL_WINDOWPOS_CENTERED);*/
+	widthScaleFactor = static_cast<float>(WIDTH) / 640;
+	heightScaleFactor = static_cast<float>(HEIGHT) / 480;
+	//InitEntities();
 	delete (TerrainF);
-	SDL_SetWindowPosition(pWindow, SDL_WINDOWPOS_CENTERED,
-	SDL_WINDOWPOS_CENTERED);
-	widthScaleFactor = static_cast<double>(WIDTH) / 640;
-	heightScaleFactor = static_cast<double>(HEIGHT) / 480;
-	InitEntities();
-	cout << "Game.Stop():\tGame stopped, Called destructors in opposite order."
-			<< endl;
+	TerrainF = CreateTerrain();
 	//SDL_DestroyRenderer(m_pRenderer);
 	//SDL_DestroyWindow(g_pWindow);
 	//SDL_Quit();
@@ -483,4 +484,3 @@ SDLFact::~SDLFact()
 }
 }
 
-//~ Formatted by Jindent --- http://www.jindent.com

@@ -11,25 +11,47 @@
 #include <iostream>
 #include "Rect.h"
 #include "Projectile.h"
+#include "Entity.h"
 
-using namespace std;
-
-class Vehicle
+namespace yarf
+{
+class Vehicle: public Entity
 {
 public:
 	Vehicle();
-	virtual void Vis(const int& FPS)=0;
-	virtual void Move(const int& FPS)=0;
-	virtual Rect GetRect()=0;
-	virtual int GetLane()=0;
-	virtual int IsInTerrain()=0;
-	virtual void SetDirection()=0;
-	virtual void SetInitPos()=0;
-	virtual void SetSpawnPos()=0;
-	virtual Projectile * CreateProjectile() = 0;
-	virtual void SetPauseMovements(bool pause_movements)=0;
-	virtual bool IsInSpawnZone()=0;
-	virtual ~Vehicle();
-};
+	void Move();
+	int GetLane();
+	// if -1 is returned, the vehicle is still within boundaries.
+	// if the vehicle is not within boundaries, the function will return the lane number, on which a new vehicle will be created.
+	int IsInTerrain();
+	void SetDirection();
+	void SetInitPos();
+	void SetSpawnPos();
+	bool IsInSpawnZone();
+	void SetSpeed(float speedScaleFactor);
 
+	//Pure virtual functions to be implemented by the visualisation
+	virtual void Vis(const int& FPS)=0;
+	virtual Projectile * CreateProjectile() = 0;
+	virtual ~Vehicle();
+protected:
+	int vehicleType;
+	// Lane -- used to determine whether a car is driving left or right
+	// 		-- also used to determine the y position of a vehicle
+	int m_lane;
+	// Ordinal Number : which ordinal rank does this car initially have on this lane?
+	// e.q.: It's the 4th vehicle on this lane. ordinalNumer=4.
+	int ordinalNumber;
+	// Angle -- used for driving left or right;
+	int angle = 0;
+	float carWidth=0.26875;
+	float carHeight=0.15625;
+	float truckWidth=0.80625;
+	float truckHeight=0.19375;
+	Rect borderRect;
+	int FPS=60; // Default 60, it gets overridden almost instantaneously. Just a safe value to begin with.
+	bool inSpawnZone= false;
+	float speed;
+};
+}
 #endif /* SRC_VEHICLE_H_ */

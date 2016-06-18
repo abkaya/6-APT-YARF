@@ -21,7 +21,7 @@ void Game::Start()
 
     // It's important to create the Window before Creating any other entity, because that'll
     // lead to nullpointer Windows/Renderer whilst using these to display other entities
-    FrogF = F -> GetFrog();
+    FrogF = F -> CreateFrog();
 
     cout << "Game.Start():\tWindow has been called through the Abstract Factory F.\n\t\tThis code has no idea whether SDL or another library is being used."
          << endl;

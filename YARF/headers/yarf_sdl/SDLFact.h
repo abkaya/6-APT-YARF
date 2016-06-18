@@ -35,7 +35,7 @@ public:
 	void InitTextures(); // Creates all Textures. We will only pass pointers to these textures.
 	void InitEntities();
 	yarf::Frog * CreateFrog();
-	Terrain * CreateBorder();
+	Terrain * CreateTerrain();
 	yarf::Frog * GetFrog();
 	void IsVehicleInTerrain();
 	void IsBulletInTerrain();
@@ -64,17 +64,17 @@ private:
 	Terrain * TerrainF = 0;
 
 	//using a list of vehicles rather than an array
-	list<Vehicle *> vehicle_list;
-	list<Vehicle *>::iterator vehicle_it_1;
+	list<yarf::Vehicle *> vehicle_list;
+	list<yarf::Vehicle *>::iterator vehicle_it_1;
 
 	//second iterator used to check on colliding cars upon creation.
-	list<Vehicle *>::iterator vehicle_it_2;
+	list<yarf::Vehicle *>::iterator vehicle_it_2;
 	int collided = 0;
 
 	int WIDTH = 640, HEIGHT = 480;
 	//the scale factor will adjust along with the width and height
-	double widthScaleFactor = static_cast<double>(WIDTH) / 640;
-	double heightScaleFactor = static_cast<double>(HEIGHT) / 480;
+	float widthScaleFactor = static_cast<float>(WIDTH) / 640;
+	float heightScaleFactor = static_cast<float>(HEIGHT) / 480;
 
 	// Border for Frog in game = gamewindow
 	SDL_Rect windowRect;
@@ -104,13 +104,15 @@ private:
 	SDL_Window * pWindow = 0;
 
 	//collision detection left and right
-	int leftA, rightA, leftB, rightB, bottomA, topA, bottomB, topB;
+	float leftA, rightA, leftB, rightB, bottomA, topA, bottomB, topB;
 
 	bool m_spawnAvailable = false;
 	list<yarf::Bullet *> bullet_list;
 	list<yarf::Bullet *>::iterator bullet_it;
 	int m_tempDir;
 	int m_theta = 0;
+
+	int score=0;
 protected:
 	int a;
 };
