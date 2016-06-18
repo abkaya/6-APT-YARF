@@ -6,132 +6,68 @@
  */
 
 #include "SDLBullet.h"
-#include <math.h>
-#define PI 3.14159265
 
 namespace yarf_sdl
 {
 SDLBullet::SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
-		SDL_Rect & WindowRect, int window_width, int window_height,
-		double height_scale_factor, Rect &frog_position, int frog_direction,
+		SDL_Rect & WindowRect, int window_width, int window_height, double &width_scale_factor,
+		double &height_scale_factor, Rect &frog_position, int frog_direction,
 		int bullet_theta)
 {
-	m_initTheta = bullet_theta;
-	m_theta = bullet_theta;
-	m_frogRect = &frog_position;
-	m_frogDirection = frog_direction;
-	m_pWindowRect = WindowRect;
-	m_pRenderer = Renderer;
-	m_pTexture = Texture;
+	initTheta = bullet_theta;
+	theta = bullet_theta;
+	frogRect = &frog_position;
+	frogDirection = frog_direction;
+	pWindowRect = WindowRect;
+	pRenderer = Renderer;
+	pTexture = Texture;
 
-	m_bulletSrcRect.x = 0; //m_bulletSrcX;
-	m_bulletSrcRect.y = 0; //m_bulletSrcY;
-	if (m_frogDirection == 5)
-		m_bulletSrcRect.x = 12;
-	if (m_frogDirection == 4)
-		m_bulletSrcRect.x = 24;
-	m_windowWidth = window_width;
-	m_windowHeight = window_height;
-	m_heightScaleFactor = height_scale_factor;
+	bulletSrcRect.x = 0; //m_bulletSrcX;
+	bulletSrcRect.y = 0; //m_bulletSrcY;
+	if (frogDirection == 5)
+		bulletSrcRect.x = 12;
+	if (frogDirection == 4)
+		bulletSrcRect.x = 24;
+	windowWidth = window_width;
+	windowHeight = window_height;
+	widthScaleFactor = &width_scale_factor;
+	heightScaleFactor = &height_scale_factor;
 
-	m_bulletSrcRect.w = m_bulletWidth;
-	m_bulletSrcRect.h = m_bulletHeight;
-	m_bulletDestRect.x = frog_position.x
-			+ static_cast<double>(0.36 * frog_position.w);
-	m_bulletDestRect.y = frog_position.y
-			+ static_cast<double>(0.36 * frog_position.h);
+	bulletSrcRect.w = bulletSrcWidth;
+	bulletSrcRect.h = bulletSrcHeight;
+	bulletDestRect.x = (*(frogRect)).x
+			+ static_cast<double>(0.36 * (*(frogRect)).w);
+	bulletDestRect.y = (*(frogRect)).y
+			+ static_cast<double>(0.36 * (*(frogRect)).h);
 
-	m_bulletWidth = m_bulletWidth * height_scale_factor;
-	m_bulletHeight = m_bulletHeight * height_scale_factor;
+	staticCoords.x=frogRect->x+0.35*frogRect->w;
+	staticCoords.y=frogRect->y+0.30*frogRect->w;
+	staticCoords.w=width;
+	staticCoords.h=height;
+	staticCoords.theta=bullet_theta;
+	position=staticCoords;
+	//called once. Now we have the  initial and non-changing
+	//coords we need to use in Move();
+	//to prevent the sine wave to "slide off" from its "DC offset". (+1 for misplaced EE jargon)
 
-	m_bulletDestRect.w = m_bulletWidth;
-	m_bulletDestRect.h = m_bulletHeight;
-
-	m_staticCoords = GetRect(); //called once. Now we have the  initial and non-changing
-								//coords we need to use in Move();
-								//to prevent the sine wave to "slide off" from its "DC offset". (+1 for misplaced EE jargon)
+	ConvertGameToVis();
 }
 
-Rect SDLBullet::GetRect()
+void SDLBullet::Vis(const int & fps)
 {
-	m_returnRect.x = m_bulletDestRect.x;
-	m_returnRect.y = m_bulletDestRect.y;
-	m_returnRect.w = m_bulletDestRect.w;
-	m_returnRect.h = m_bulletDestRect.h;
-	return m_returnRect;
+	FPS=fps;
+	ConvertGameToVis();
+	SDL_RenderCopy(pRenderer, pTexture, &bulletSrcRect, &bulletDestRect);
 }
 
-void SDLBullet::Vis(const int & FPS)
+void SDLBullet::ConvertGameToVis() //converts the frog game coords to frog visualisation coords
 {
-	SDL_RenderCopy(m_pRenderer, m_pTexture, &m_bulletSrcRect,
-			&m_bulletDestRect);
-}
+	bulletDestRect.w = position.w * 160 * (*widthScaleFactor);
+	bulletDestRect.h = position.h * 160 * (*heightScaleFactor);
+	bulletDestRect.x = position.x * 160 * (*widthScaleFactor);
+	bulletDestRect.y = position.y * 160 * (*heightScaleFactor);
 
-void SDLBullet::Move(const int & FPS)
-{
-	switch (m_frogDirection)
-	{
-	case 0:                           // North
-		m_theta = m_theta + m_bulletSpeed;
-		m_bulletDestRect.y -= m_bulletSpeed;
-		m_bulletDestRect.x = 10 * ceil(m_heightScaleFactor)
-				* sin(m_theta * (PI / 180)) + m_staticCoords.x;
-		break;
-	case 1:                           // East
-		m_theta = m_theta + m_bulletSpeed;
-		m_bulletDestRect.x += m_bulletSpeed;
-		m_bulletDestRect.y = 10 * ceil(m_heightScaleFactor)
-				* sin(m_theta * (PI / 180)) + m_staticCoords.y;
-		break;
-	case 2:                           // South
-		m_theta = m_theta + m_bulletSpeed;
-		m_bulletDestRect.y += m_bulletSpeed;
-		m_bulletDestRect.x = 10 * ceil(m_heightScaleFactor)
-				* sin(m_theta * (PI / 180)) + m_staticCoords.x;
-		break;
-	case 3:                           // West
-		m_theta = m_theta + m_bulletSpeed;
-		m_bulletDestRect.x -= m_bulletSpeed;
-		m_bulletDestRect.y = 10 * ceil(m_heightScaleFactor)
-				* sin(m_theta * (PI / 180)) + m_staticCoords.y;
-		break;
-	case 4:
-		m_radius = m_radius + m_bulletSpeed;
-		if (m_theta > (m_initTheta + 1) && m_clockwise == 1)
-			m_clockwise = -1;
-		if (m_theta < (m_initTheta - 1) && m_clockwise == -1)
-			m_clockwise = 1;
-		m_theta = m_theta + m_clockwise;
-		m_bulletDestRect.x = m_staticCoords.x
-				+ m_radius * cos(m_theta * (PI / 180));
-		m_bulletDestRect.y = m_staticCoords.y
-				+ m_radius * sin(m_theta * (PI / 180));
-		break;
-	case 5:
-		m_theta++;
-		m_bulletDestRect.x = m_frogRect->x
-				+ static_cast<double>(0.37 * (m_frogRect->w))
-				+ m_frogRect->w * 0.65 * cos(m_theta % 360);
-		m_bulletDestRect.y = m_frogRect->y
-				+ static_cast<double>(0.30 * (m_frogRect->w))
-				+ m_frogRect->w * 0.65 * sin(m_theta % 360);
-		break;
-	case -1:
-		break;
-	default:
-		break;
-	}
-}
-
-bool SDLBullet::IsInTerrain()
-{
-	if (m_bulletDestRect.x > m_windowWidth + m_frogRect->w
-			|| m_bulletDestRect.x < -m_frogRect->w
-			|| m_bulletDestRect.y < -m_frogRect->w
-			|| m_bulletDestRect.y > m_windowHeight + m_frogRect->w)
-		return 0;
-	else
-		return 1;
+	std::cout<<bulletDestRect.x << " , " << bulletDestRect.y << std::endl;
 }
 
 SDLBullet::~SDLBullet()

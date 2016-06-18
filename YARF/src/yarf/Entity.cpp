@@ -12,8 +12,22 @@ namespace yarf
 
 Entity::Entity()
 {
-	// TODO Auto-generated constructor stub
+}
 
+bool Entity::IsInTerrain(Rect testPosition)	//false if entity is outside the game axis[0,4]x[0,3]
+{
+	if ((testPosition.x < -position.w / 2)
+			|| (testPosition.x + testPosition.w) > (gameAxisWidth)
+			|| (testPosition.y < -position.h/2)
+			|| (testPosition.y + testPosition.h)
+					> (gameAxisHeight + position.w))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 Rect Entity::GetRect(){
@@ -22,8 +36,7 @@ Rect Entity::GetRect(){
 
 Entity::~Entity()
 {
-	// TODO Auto-generated destructor stub
 }
 
-} /* namespace Game */
+} /* namespace yarf (game) */
 

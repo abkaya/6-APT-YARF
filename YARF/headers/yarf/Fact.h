@@ -17,6 +17,7 @@
 #include "Terrain.h"
 #include "Vehicle.h"
 #include "Rect.h"
+#include "Entity.h"
 
 namespace yarf{
 class Frog;
@@ -53,7 +54,7 @@ class Fact
                           int          flags) = 0;
         virtual void Render() = 0;
         virtual void HandleEvents() = 0;
-        virtual void Close() = 0;
+        virtual void Resize() = 0;
 };
 }
 #endif /* SRC_FACT_H_ */

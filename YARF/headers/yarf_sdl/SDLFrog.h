@@ -23,63 +23,41 @@ class SDLFrog: public yarf::Frog
 {
 public:
 	SDLFrog(SDL_Renderer * Renderer, SDL_Texture * Texture,
-			SDL_Rect & m_windowRect, int window_width, int window_height,
-			double height_scale_factor, list<yarf::Bullet *> &bullet_list);
+			SDL_Rect & m_windowRect, int window_width, int window_height, double &width_scale_factor,
+			double &height_scale_factor, list<yarf::Bullet *> &bullet_list);
 	void Vis(int direction, int leaping, const int & FPS);
-	bool IsInTerrain(Rect entityRect);
-	void Leap(int & direction);
-	void Kill();
-	Rect GetRect();
-	int SetDest(int direction, int & xCoord, int & yCoord);
+	void LeapVis(int & direction);
 	void CreateBullet();
 	void CreateBullet(int direction, int theta);
+	void ConvertGameToVis();
 	virtual ~SDLFrog();
 
 private:
 	SDL_Texture * m_pTexture = 0;
+	SDL_Rect frogSrcRect; 				// source rectangle
+	SDL_Rect frogDestRect;				// visualisation destination rectangle
+	Rect hitRect; 						// frogDestRect used to pass by reference to bullets
+	SDL_Rect pWindowRect;				// window pointer will be assigned through constructor
+	SDL_Point frogRotatePoint;
+	SDL_Renderer * m_pRenderer = 0;		// renderer pointer will be assigned through constructor
 
-	// source rectangle
-	SDL_Rect m_frogSrcRect;
+	int frogSrcX = 0;					// non-leap Frog coords on the texture
+	int frogSrcY = 120;
 
-	// another rectangle to copy to
-	SDL_Rect m_frogDestRect;
+	// frog width and height on the texture
+	double frogSrcWidth = 41;
+	double frogSrcHeight = 46;
 
-	// Rect to share
-	Rect m_hitRect;
-
-	SDL_Rect m_pWindowRect;
-
-	// test rectangle used whilst checking for entity going outside of the game window
-	Rect m_testRect;
-
-	// The angle to rotate the frog to before rendering
-	int m_angle = 0;
-	int m_frogDirection = 0; //0 north, 1 east, 2 south, 4 west
-	SDL_Point m_frogRotatePoint;
-	SDL_Renderer * m_pRenderer = 0;
-
-	// non-leap Frog coords on the texture
-	int nlx = 0;
-	int nly = 120;
-
-	// frog width and height for both leaping and not leaping
-	double m_frogWidth = 41;
-	double m_frogHeight = 46;
-
-	double m_windowWidth;
-	double m_windowHeight;
-	double m_heightScaleFactor;
+	double windowWidth;
+	double windowHeight;
+	double *m_widthScaleFactor;
+	double *m_heightScaleFactor;
 
 	// m_leaping can be anywhere
-	int m_leaping = 0;
-
-	// jump pixels
-	int m_jumpLength = 65;
+	int leaping = 0;
 
 	yarf::Bullet * Bullet = 0;
 	list<yarf::Bullet *> *m_bulletList;
-protected:
-	int b;
 };
 }
 #endif /* SRC_SDLFROG_H_ */

@@ -20,19 +20,23 @@ class Frog: public Entity
 {
 public:
 	Frog();
+	//non-virtual functions  || purely game related
+	int MoveToDirection(int direction);
+	void Kill();
+
+	//pure virtual functions
 	virtual void Vis(int direction, int leaping, const int & FPS) = 0;
-	virtual void Leap(int & direction) = 0;
-	virtual bool IsInTerrain(Rect entityRect) = 0;
-	virtual int SetDest(int direction, int & xCoord, int & yCoord) = 0;
-	virtual void Kill()=0;
+	virtual void LeapVis(int & direction)=0;
 	virtual void CreateBullet()=0;
 	virtual void CreateBullet(int direction, int theta)=0;
-
-	void SetRect(float& x, float& y, float& w, float& h, int& theta);
 	virtual ~Frog();
 protected:
-	int potato=0;
-
+	int frogDirection=0; 		//0 north, 1 east, 2 south, 4 west
+private:
+	Rect testPosition;
+	float width=0.2;
+	float height=0.22;
+	float jumpDistance=0.3;
 };
 }
 #endif /* SRC_FROG_H_ */

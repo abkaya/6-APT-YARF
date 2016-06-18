@@ -21,10 +21,19 @@ SDLVehicle::SDLVehicle(SDL_Renderer * Renderer, SDL_Texture * Texture,
 {
 	// non-leap nlx,nly
 	m_vehicleSrcRect.x = 0;
-	m_vehicleSrcRect.y = 64;
+	m_vehicleSrcRect.y = 64;//*height_scale_factor;
+
+	SDL_Rect A;
+	float a;
+	float *pa=&a;
+	A.h=*pa;
+
 
 	m_windowWidth = window_width;
 	m_windowHeight = window_height;
+
+	//*(3/4) and *(4/3) -- sprite bound.  == visualisation bound.
+	//because the cars need to be adjusted to the 4x3 default width x height ratio
 	m_widthScaleFactor = width_scale_factor;
 	m_heightScaleFactor = height_scale_factor;
 
@@ -37,7 +46,7 @@ SDLVehicle::SDLVehicle(SDL_Renderer * Renderer, SDL_Texture * Texture,
 	m_vehicleSrcRect.w = m_carWidth;
 	m_vehicleSrcRect.h = m_carHeight;
 
-	m_carWidth = m_carWidth * m_heightScaleFactor;
+	m_carWidth = m_carWidth * m_widthScaleFactor;
 	m_carHeight = m_carHeight * m_heightScaleFactor;
 
 	m_vehicleDestRect.w = m_carWidth;
@@ -52,14 +61,14 @@ SDLVehicle::SDLVehicle(SDL_Renderer * Renderer, SDL_Texture * Texture,
 
 	SetDirection();
 	m_rotateVehiclePoint.y = m_vehicleDestRect.h / 2;
-	m_rotateVehiclePoint.x = m_vehicleDestRect.w;
+	m_rotateVehiclePoint.x = m_vehicleDestRect.w/2;
 	m_vehicleSrcRect.x += (m_vehicleType * 44); //44 = distance between vehicles on spritesheet
 	if (m_vehicleType == 4)
 	{
 		m_vehicleSrcRect.w = m_truckWidth;
 		m_vehicleSrcRect.h = m_truckHeight;
 
-		m_truckWidth = m_truckWidth * m_heightScaleFactor;
+		m_truckWidth = m_truckWidth * m_widthScaleFactor;
 		m_truckHeight = m_truckHeight * m_heightScaleFactor;
 
 		m_vehicleDestRect.w = m_truckWidth;
@@ -86,7 +95,7 @@ void SDLVehicle::SetDirection()
 {
 	// First car starts at y=84 default. Adjusted with the scale factor and multiplied with the terrain
 	//block height wihch happens to be 1/10 of the height of the window.
-	m_vehicleDestRect.y = static_cast<double>(84 * m_heightScaleFactor)
+	m_vehicleDestRect.y = static_cast<double>(57 * m_heightScaleFactor)
 			+ (m_lane * m_windowHeight / 10);
 
 	if (m_lane % 2 == 0) // if lane is even, set angle of vehicle texture to 180°: drive right

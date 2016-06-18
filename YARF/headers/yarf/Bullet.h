@@ -10,41 +10,37 @@
 
 #include <iostream>
 #include "Rect.h"
+#include "Entity.h"
 
 namespace yarf
 {
 
-class Bullet
+class Bullet : public Entity
 {
 public:
 	Bullet();
 	virtual void Vis(const int& FPS)=0;
-	virtual void Move(const int& FPS)=0;
-	virtual bool IsInTerrain()=0;
-	virtual Rect GetRect()=0;
+	void Move();
 	virtual ~Bullet();
 protected:
-	int m_theta=0;
-	int m_radius=0;
-	int m_initTheta=0; //used to sway between theta degrees.
-	int m_clockwise=1;
-	Rect *m_frogRect;
-	Rect m_staticCoords;
+	int FPS=60; 	//default | initial behaviour -- is updated almost instantaneously. It's a safe value
+	float theta=0;
+	int radius=0;
+	int initTheta=0; //used to sway between theta degrees.
+	int clockwise=1;
+	Rect *frogRect;
+	Rect staticCoords;
 		// Rect to share
-	Rect m_returnRect;
+	Rect returnRect;
 
-	int m_bulletSpeed=15;
-
+	float bulletSpeed=0.093;
 	//direction: 0: north, 1: east, 2: south, 3: west
-	int m_frogDirection;
-	int m_bulletSrcX = 0;
-	int m_bulletSrcY = 0;
-	double m_bulletWidth = 12;
-	double m_bulletHeight = 12;
+	int frogDirection;
+	//double widthScaleFactor;
+	Rect testPosition;
+	double width = 0.075;
+	double height = 0.075;
 
-	double m_windowWidth;
-	double m_windowHeight;
-	double m_heightScaleFactor;
 };
 }
 #endif /* SRC_BULLET_H_ */

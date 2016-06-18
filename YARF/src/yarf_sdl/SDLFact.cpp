@@ -18,7 +18,7 @@ SDLFact::SDLFact() :
 {
 	//Initialisation of the window happens here
 	cout << "SDLWindow:\tMake WINDOW IN SDL" << endl;
-	if (Init("Frogs R Us", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	if (Init("YARF | Yet Another Reckless Frog", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE))
 	{
 		bRunning = true;
@@ -174,7 +174,7 @@ void SDLFact::IsBulletInTerrain()
 	bullet_it = bullet_list.begin();
 	while (bullet_it != bullet_list.end())
 	{
-		if ((*bullet_it)->IsInTerrain() != 1)
+		if ((*(bullet_it))->IsInTerrain((*(bullet_it))->GetRect()) == false)
 		{
 			delete ((*(bullet_it)));
 			bullet_list.erase(bullet_it++);
@@ -297,13 +297,13 @@ void SDLFact::ManageVehicleNumber()
 yarf::Frog * SDLFact::CreateFrog()
 {
 	return new yarf_sdl::SDLFrog(pRenderer, pTexture, windowRect, WIDTH,
-			HEIGHT, heightScaleFactor, bullet_list);
+			HEIGHT, widthScaleFactor, heightScaleFactor, bullet_list);
 }
 
 Terrain * SDLFact::CreateBorder()
 {
 	return new SDLTerrain(pRenderer, pTexture, WIDTH, HEIGHT,
-			heightScaleFactor);
+			heightScaleFactor, widthScaleFactor);
 }
 
 yarf::Frog * SDLFact::GetFrog()
@@ -353,7 +353,9 @@ void SDLFact::Render()
 	// clear the window to the RenderDrawColor set in the Init function ^
 	SDL_RenderClear(pRenderer);
 	TerrainF->Vis();
+	FrogF->MoveToDirection(m_direction);
 	FrogF->Vis(m_direction, m_leaping, FPS);
+
 
 	for (vehicle_it_1 = vehicle_list.begin();
 			vehicle_it_1 != vehicle_list.end(); ++vehicle_it_1)
@@ -401,6 +403,7 @@ void SDLFact::HandleEvents()
 				m_theta = 0;
 				for (m_theta = 0; m_theta < 360; m_theta = m_theta + 10) //electric bullet every 10°
 				{
+					//"4" is the bullet/frog direction parameter, this time used to denote the electric bullet type
 					FrogF->CreateBullet(4, m_theta);
 				}
 				break;
@@ -408,6 +411,7 @@ void SDLFact::HandleEvents()
 				m_theta = 0;
 				for (m_theta = 0; m_theta < 360; m_theta = m_theta + 36) //forceshield bullet every 36°
 				{
+					//"5" is the bullet/frog direction parameter, this time used to denote the green defence bullet type
 					FrogF->CreateBullet(5, m_theta);
 				}
 				break;
@@ -421,7 +425,7 @@ void SDLFact::HandleEvents()
 			case SDL_WINDOWEVENT_RESIZED:
 				WIDTH = event.window.data1;
 				HEIGHT = event.window.data2;
-				Close();
+				Resize();
 				break;
 			default:
 				break;
@@ -439,7 +443,7 @@ void SDLFact::HandleEvents()
 	}
 }
 
-void SDLFact::Close()
+void SDLFact::Resize()
 {
 	SDL_SetWindowSize(pWindow, WIDTH, HEIGHT);
 	for (auto* bullet : bullet_list)
@@ -447,17 +451,23 @@ void SDLFact::Close()
 		delete (bullet);
 		bullet_list.remove(bullet);
 	}
+
+	//Try keeping the vehicles intact, but resize on the fly
+	//will temporarily result in a lot of vehicles-- don't worry.
+	//if it works, it works.
+
 	for (auto* vehicle : vehicle_list)
 	{
 		delete (vehicle);
 		vehicle_list.remove(vehicle);
 	}
+
 	delete (FrogF);
 	delete (TerrainF);
 	SDL_SetWindowPosition(pWindow, SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED);
 	widthScaleFactor = static_cast<double>(WIDTH) / 640;
-	heightScaleFactor = static_cast<double>(HEIGHT) / 640;
+	heightScaleFactor = static_cast<double>(HEIGHT) / 480;
 	InitEntities();
 	cout << "Game.Stop():\tGame stopped, Called destructors in opposite order."
 			<< endl;

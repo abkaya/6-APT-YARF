@@ -22,6 +22,7 @@ void Game::Start()
     // It's important to create the Window before Creating any other entity, because that'll
     // lead to nullpointer Windows/Renderer whilst using these to display other entities
     FrogF = F -> GetFrog();
+
     cout << "Game.Start():\tWindow has been called through the Abstract Factory F.\n\t\tThis code has no idea whether SDL or another library is being used."
          << endl;
 
@@ -39,12 +40,12 @@ void Game::Start()
             F->Delay((int) (DELAY_TIME - m_frameTime));
         }
     }
-    F->Close();
+    F->Resize();
     // WindowF->Close(); << Do NOT call this from Game. SDLWindow can handle it internally. Consider removing the function
 }
 void Game::Stop()
 {
-    F->Close();
+    F->Resize();
 }
 Game::~Game()
 {

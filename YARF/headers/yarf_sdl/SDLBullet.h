@@ -21,27 +21,27 @@ class SDLBullet: public yarf::Bullet
 {
 public:
 	SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
-			SDL_Rect & m_windowRect, int window_width, int window_height,
-			double height_scale_factor, Rect &frog_position, int frog_direction, int bullet_theta);
+			SDL_Rect & m_windowRect, int window_width, int window_height, double &width_scale_factor,
+			double &height_scale_factor, Rect &frog_position, int frog_direction, int bullet_theta);
 	void Vis(const int& FPS);
-	void Move(const int& FPS);
-	bool IsInTerrain();
-	Rect GetRect();
+	void ConvertGameToVis();
 	virtual ~SDLBullet();
 private:
-	SDL_Texture * m_pTexture = 0;
+	SDL_Texture * pTexture = 0;
+	SDL_Rect pWindowRect;
+	SDL_Rect bulletSrcRect;				// source rectangle
+	SDL_Rect bulletDestRect;			// bullet vis. destination rectangle
+	SDL_Point frogRotatePoint;
+	SDL_Renderer * pRenderer = 0;
 
-	// source rectangle
-	SDL_Rect m_bulletSrcRect;
-
-	// another rectangle to copy to
-	SDL_Rect m_bulletDestRect;
-	SDL_Rect m_pWindowRect;
-
-	// The angle to rotate the frog to before rendering
-	//int m_angle = 0;
-	SDL_Point m_frogRotatePoint;
-	SDL_Renderer * m_pRenderer = 0;
+	double windowWidth;
+	double windowHeight;
+	double *widthScaleFactor;
+	double *heightScaleFactor;
+	int bulletSrcX = 0;
+	int bulletSrcY = 0;
+	int bulletSrcWidth=12;
+	int bulletSrcHeight=12;
 };
 }
 #endif /* SRC_SDLBULLET_H_ */

@@ -10,7 +10,7 @@
 namespace yarf_sdl
 {
 SDLTerrain::SDLTerrain(SDL_Renderer * Renderer, SDL_Texture * Texture,
-		int window_width, int window_height, double height_scale_factor)
+		int window_width, int window_height, double height_scale_factor, double width_scale_factor)
 {
 	m_pRenderer = Renderer;
 	m_pTexture = Texture;
@@ -24,15 +24,16 @@ SDLTerrain::SDLTerrain(SDL_Renderer * Renderer, SDL_Texture * Texture,
 	m_windowWidth = window_width;
 	m_windowHeight = window_height;
 	m_heightScaleFactor = height_scale_factor;
+	m_widthScaleFactor= width_scale_factor;
 
-	m_terrainSrcRect.w = m_terrainWidth;
-	m_terrainSrcRect.h = m_terrainHeight;
+	m_terrainSrcRect.w = m_terrainSrcWidth;
+	m_terrainSrcRect.h = m_terrainSrcHeight;
 
-	m_terrainWidth = m_terrainWidth * m_heightScaleFactor;
-	m_terrainHeight = m_terrainHeight * m_heightScaleFactor;
+	m_terrainDstWidth = m_terrainDstWidth * m_widthScaleFactor;
+	m_terrainDstHeight = m_terrainDstHeight * m_heightScaleFactor;
 
-	m_borderDestRect.w = m_terrainWidth;
-	m_borderDestRect.h = m_terrainHeight;
+	m_borderDestRect.w = m_terrainDstWidth;
+	m_borderDestRect.h = m_terrainDstHeight;
 }
 void SDLTerrain::Vis()
 {
@@ -45,12 +46,12 @@ void SDLTerrain::Vis()
 
 	// road
 	// place road terrain on the x-axis
-	for (int i = 0; i < m_windowWidth; i += m_terrainWidth)
+	for (int i = 0; i < m_windowWidth; i += m_terrainDstWidth)
 	{
 		m_borderDestRect.x = i;
 		// place road terrain along the y-axis
-		for (int j = m_terrainHeight; j < m_windowHeight - m_terrainHeight; j +=
-				m_terrainHeight)
+		for (int j = m_terrainDstHeight; j < m_windowHeight - m_terrainDstHeight; j +=
+				m_terrainDstHeight)
 		{
 			m_borderDestRect.y = j;
 			SDL_RenderCopy(m_pRenderer, m_pTexture, &m_terrainSrcRect,
@@ -62,7 +63,7 @@ void SDLTerrain::Vis()
 	m_terrainSrcRect.x = 128;
 	m_borderDestRect.y = 0;
 	//the first borderwalk terrain starts on y=0, placed along x-axis
-	for (int i = 0; i < m_windowWidth; i += m_terrainWidth)
+	for (int i = 0; i < m_windowWidth; i += m_terrainDstWidth)
 	{
 		m_borderDestRect.x = i;
 		SDL_RenderCopyEx(m_pRenderer, m_pTexture, &m_terrainSrcRect,
@@ -70,8 +71,8 @@ void SDLTerrain::Vis()
 	}
 	//the second borderwalk terrain starts on a y-value which depends on
 	//the windowHeight and scaled terrain block height
-	m_borderDestRect.y = m_windowHeight - m_terrainHeight;
-	for (int i = 0; i < m_windowWidth; i += m_terrainWidth)
+	m_borderDestRect.y = m_windowHeight - m_terrainDstHeight;
+	for (int i = 0; i < m_windowWidth; i += m_terrainDstWidth)
 	{
 		m_borderDestRect.x = i;
 		SDL_RenderCopy(m_pRenderer, m_pTexture, &m_terrainSrcRect,

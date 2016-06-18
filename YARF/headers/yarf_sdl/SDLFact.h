@@ -56,7 +56,7 @@ public:
 	bool IsSpawnAvailable(int lane);
 	void SpawnVehicle(int lane);
 	void ManageVehicleNumber();
-	void Close();
+	void Resize();
 private:
 	int FPS;
 
@@ -71,10 +71,10 @@ private:
 	list<Vehicle *>::iterator vehicle_it_2;
 	int collided = 0;
 
-	int WIDTH = 1300, HEIGHT = 900;
+	int WIDTH = 640, HEIGHT = 480;
 	//the scale factor will adjust along with the width and height
 	double widthScaleFactor = static_cast<double>(WIDTH) / 640;
-	double heightScaleFactor = static_cast<double>(HEIGHT) / 640;
+	double heightScaleFactor = static_cast<double>(HEIGHT) / 480;
 
 	// Border for Frog in game = gamewindow
 	SDL_Rect windowRect;

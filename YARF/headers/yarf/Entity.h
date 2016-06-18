@@ -17,11 +17,17 @@ class Entity
 {
 public:
 	Entity();
-	virtual Rect GetRect(); //non-pure virtual function
-	virtual void SetRect(float& x, float& y, float& w, float& h, int& theta)=0; //pure virtual function
+	//non-pure virtual function | optional implementation inheritance
+	virtual Rect GetRect();
+	virtual bool IsInTerrain(Rect testPosition);
+
+	//pure virtual function | forced interface inheritance
+	virtual void ConvertGameToVis()=0;
 	virtual ~Entity()=0;
 protected:
 	Rect position;
+	float gameAxisWidth=4;
+	float gameAxisHeight=3;
 };
 
 } /* namespace Game */

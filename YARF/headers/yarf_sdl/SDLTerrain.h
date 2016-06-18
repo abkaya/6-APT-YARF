@@ -18,7 +18,7 @@ class SDLTerrain : public Terrain
 {
     public:
         SDLTerrain(SDL_Renderer * Renderer,
-                  SDL_Texture *  Texture, int window_width, int window_height, double height_scale_factor);
+                  SDL_Texture *  Texture, int window_width, int window_height, double height_scale_factor, double width_scale_factor);
         void Vis();
         virtual ~SDLTerrain();
     private:
@@ -33,14 +33,18 @@ class SDLTerrain : public Terrain
 
         SDL_Renderer * m_pRenderer = 0;
 
-        //Terrain blocks original source width and height
-        double m_terrainWidth=64;
-        double m_terrainHeight=64;
+        //Terrain blocks don't keep the original source width and height
+        double m_terrainSrcWidth=64;
+        double m_terrainSrcHeight=64;
+        //The destination however needs to abide by the 4x3 window setup (requirement)
+        double m_terrainDstWidth=64;
+        double m_terrainDstHeight=48;
 
         //window width & height
         double m_windowWidth;
         double m_windowHeight;
         double m_heightScaleFactor;
+        double m_widthScaleFactor;
 };
 #endif /* SRC_SDLTERRAIN_ */
 
