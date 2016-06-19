@@ -23,19 +23,21 @@ public:
 	void Move();
 	virtual ~Bullet();
 protected:
-	int FPS=60; 	//default | initial behaviour -- is updated almost instantaneously. It's a safe value
+	float FPS=60; 	//default | initial behaviour -- is updated before the Move() is called
+	bool calibratedTPS=false;
 	float theta=0;
 	float radius=0;
-	int initTheta=0; //used to sway between theta degrees.
-	int clockwise=1;
-	Rect *frogRect;
+	float initTheta=0; //used to sway between theta degrees.
+	float degreeSway=1;
+	float clockwise=1;
+	Rect *frogRect=nullptr;
 	Rect staticCoords;
 		// Rect to share
 	Rect returnRect;
 
 	float bulletSpeed=0.07;
 	//direction: 0: north, 1: east, 2: south, 3: west
-	int frogDirection;
+	int frogDirection=0;
 	//double widthScaleFactor;
 	Rect testPosition;
 	double width = 0.075;

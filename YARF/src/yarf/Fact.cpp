@@ -16,6 +16,5 @@ Fact::Fact()
 }
 Fact::~Fact()
 {
-	cout << "Fact.~Fact():\tDestroyed a Fact object. [DIRECT]" << endl;
 }
 }

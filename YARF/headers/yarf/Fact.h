@@ -13,6 +13,7 @@
 
 #include <string>
 #include <list>
+#include "Bullet.h"
 #include "Frog.h"
 #include "Terrain.h"
 #include "Vehicle.h"
@@ -25,37 +26,23 @@ class Fact
 {
     public:
         Fact();
-        virtual ~Fact();
-        virtual void InitTextures()=0;
-        virtual void InitEntities()=0;
         virtual Terrain * CreateTerrain() = 0;
-
-        virtual yarf::Frog * CreateFrog() = 0;
-        virtual yarf::Frog * GetFrog() = 0;
-        virtual void DetectCollision()=0;
-        virtual void IsVehicleInTerrain()=0;
-        virtual void IsBulletInTerrain()=0;
-        virtual bool IsSpawnAvailable(int lane)=0;
-        virtual void SpawnVehicle(int lane)=0;
-        virtual void ManageVehicleNumber()=0;
-        virtual void RemoveCollidingVehicle(bool initial_spawns)=0;
-        virtual void BulletVehicleCollision()=0;
-
-        // Methods used to allow for the game loop & logic to happen in game.cpp
-        virtual bool IsRunning()=0;
-        virtual int GetTicks()=0;
-        virtual void Delay(int delay_time)=0;
-
-        virtual void Vis() = 0;
-        virtual bool Init(const char * title,
-                          int          xPos,
-                          int          yPos,
-                          int          height,
-                          int          width,
-                          int          flags) = 0;
-        virtual void Render() = 0;
+        virtual yarf::Frog * CreateFrog(list<yarf::Bullet *> &bullet_list) = 0;
+        virtual yarf::Vehicle * CreateVehicle(bool init_spawn, int lane, int ordinalNumber)=0;
+        virtual Rect GetFrogStates()=0;
+        virtual bool Init(const char * title, int xPos, int yPos, int height,
+			int width, int flags) = 0;
+        virtual void InitTextures()=0;
+        virtual void HandleVisEvents() = 0;
+        virtual void RenderClear() = 0;
+        virtual void RenderPresent()=0;
         virtual void HandleEvents() = 0;
         virtual void Resize() = 0;
+        virtual bool IsRunning()=0;					//Visualisation running?
+        virtual int GetTicks()=0;					//SDL ticks
+        virtual void Delay(int delay_time)=0;		//Used for Ticks Per Second (TPS), which is in our case equal to FPS
+        virtual void Stop()=0;
+        virtual ~Fact();
 };
 }
 #endif /* SRC_FACT_H_ */

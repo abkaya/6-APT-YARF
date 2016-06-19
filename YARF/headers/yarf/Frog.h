@@ -29,7 +29,7 @@ public:
 	virtual void LeapVis(int & direction)=0;
 	virtual void CreateBullet()=0;
 	virtual void CreateBullet(int direction, int theta)=0;
-	virtual ~Frog();
+	virtual ~Frog(); 			//doesn't have to be pure virtual.
 protected:
 	int frogDirection=0; 		//0 north, 1 east, 2 south, 4 west
 private:

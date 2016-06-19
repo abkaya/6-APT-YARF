@@ -10,7 +10,7 @@
 namespace yarf_sdl
 {
 SDLBullet::SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
-		SDL_Rect & WindowRect, int window_width, int window_height, float &width_scale_factor,
+		SDL_Rect & WindowRect, float &width_scale_factor,
 		float &height_scale_factor, Rect &frog_position, int frog_direction,
 		int bullet_theta)
 {
@@ -28,8 +28,7 @@ SDLBullet::SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
 		bulletSrcRect.x = 12;
 	if (frogDirection == 4)
 		bulletSrcRect.x = 24;
-	windowWidth = window_width;
-	windowHeight = window_height;
+
 	widthScaleFactor = &width_scale_factor;
 	heightScaleFactor = &height_scale_factor;
 
@@ -40,22 +39,21 @@ SDLBullet::SDLBullet(SDL_Renderer * Renderer, SDL_Texture * Texture,
 	bulletDestRect.y = (*(frogRect)).y
 			+ static_cast<double>(0.36 * (*(frogRect)).h);
 
-	staticCoords.x=frogRect->x+0.35*frogRect->w;
-	staticCoords.y=frogRect->y+0.30*frogRect->w;
-	staticCoords.w=width;
-	staticCoords.h=height;
-	staticCoords.theta=bullet_theta;
-	position=staticCoords;
-	//called once. Now we have the  initial and non-changing
-	//coords we need to use in Move();
-	//to prevent the sine wave to "slide off" from its "DC offset". (+1 for misplaced EE jargon)
+	staticCoords.x = frogRect->x + 0.35 * frogRect->w;
+	staticCoords.y = frogRect->y + 0.30 * frogRect->w;
+	staticCoords.w = width;
+	staticCoords.h = height;
+	staticCoords.theta = bullet_theta;
+	position = staticCoords;
+	//called once. Now we have the  initial and non-changing coords we'll be using
+	//to prevent the sine wave from sliding off of its DC offset. (my apologies for misplaced EE jargon)
 
 	ConvertGameToVis();
 }
 
 void SDLBullet::Vis(const int & fps)
 {
-	FPS=fps;
+	FPS = fps;
 	ConvertGameToVis();
 	SDL_RenderCopy(pRenderer, pTexture, &bulletSrcRect, &bulletDestRect);
 }

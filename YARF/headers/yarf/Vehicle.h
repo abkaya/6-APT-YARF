@@ -35,13 +35,13 @@ public:
 	virtual Projectile * CreateProjectile() = 0;
 	virtual ~Vehicle();
 protected:
-	int vehicleType;
+	int vehicleType=0;
 	// Lane -- used to determine whether a car is driving left or right
 	// 		-- also used to determine the y position of a vehicle
-	int m_lane;
+	int m_lane=0;
 	// Ordinal Number : which ordinal rank does this car initially have on this lane?
 	// e.q.: It's the 4th vehicle on this lane. ordinalNumer=4.
-	int ordinalNumber;
+	int ordinalNumber=0;
 	// Angle -- used for driving left or right;
 	int angle = 0;
 	float carWidth=0.26875;
@@ -51,7 +51,7 @@ protected:
 	Rect borderRect;
 	int FPS=60; // Default 60, it gets overridden almost instantaneously. Just a safe value to begin with.
 	bool inSpawnZone= false;
-	float speed;
+	float speed=0;
 };
 }
 #endif /* SRC_VEHICLE_H_ */

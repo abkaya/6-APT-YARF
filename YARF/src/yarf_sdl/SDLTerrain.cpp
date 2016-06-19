@@ -39,12 +39,12 @@ void SDLTerrain::Vis()
 {
 
 	/* Flexible window resizing for when WIDTH & HEIGHT are edited in SDLFact.h
-	 * Default values
-	 * m_width : 640
-	 * m_scaleFactor : 1
+	 * Default values:
+	 * m_width = 640
+	 * for which m_scaleFactor = 1
 	 */
 
-	// road
+	/*road*/
 	// place road terrain on the x-axis
 	for (int i = 0; i < m_windowWidth; i += m_terrainDstWidth)
 	{
@@ -59,7 +59,7 @@ void SDLTerrain::Vis()
 		}
 	}
 
-	// grass borderwalks
+	/*grass borderwalks*/
 	m_terrainSrcRect.x = 128;
 	m_borderDestRect.y = 0;
 	//the first borderwalk terrain starts on y=0, placed along x-axis

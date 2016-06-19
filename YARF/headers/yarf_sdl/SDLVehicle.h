@@ -53,10 +53,6 @@ private:
 	double truckSrcWidth = 129;
 	double truckSrcHeight = 31;
 
-	//window width & height
-	double windowWidth;
-	double windowHeight;
-
 	float *heightScaleFactor;
 	float *widthScaleFactor;
 

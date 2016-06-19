@@ -9,11 +9,9 @@
 
 Rect::Rect()
 {
-
 }
 
 Rect::~Rect()
 {
-	// TODO Auto-generated destructor stub
 }
 

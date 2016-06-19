@@ -14,12 +14,9 @@ namespace yarf_sdl
 
 // direction: 1= right, 0 = left
 SDLVehicle::SDLVehicle(SDL_Renderer * Renderer, SDL_Texture * Texture,
-		bool init_spawn,
-		int lane,    // instead of y, give lane number. 1-8.
-		int ordinal_number, int vehicle_type, float &width_scale_factor,
-		float &height_scale_factor)
+		bool init_spawn, int lane, int ordinal_number, int vehicle_type,
+		float &width_scale_factor, float &height_scale_factor)
 {
-	// non-leap nlx,nly
 	vehicleSrcRect.x = 0;
 	vehicleSrcRect.y = 64;
 
@@ -27,6 +24,7 @@ SDLVehicle::SDLVehicle(SDL_Renderer * Renderer, SDL_Texture * Texture,
 	heightScaleFactor = &height_scale_factor;
 
 	ordinalNumber = abs(ordinal_number - 4);
+	// instead of y, pass lane number. 1-8.
 	m_lane = lane;
 	vehicleType = vehicle_type;
 	pRenderer = Renderer;
@@ -66,7 +64,7 @@ void SDLVehicle::Vis(const int & fps)
 	//IsInTerrain();
 	//Move(FPS);
 	ConvertGameToVis();
-	FPS=fps;
+	FPS = fps;
 	SDL_RenderCopyEx(pRenderer, pTexture, &vehicleSrcRect, &vehicleDestRect,
 			angle, NULL, SDL_FLIP_NONE);
 }

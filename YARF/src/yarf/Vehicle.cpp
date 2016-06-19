@@ -25,17 +25,19 @@ void Vehicle::SetInitPos()
 	if (m_lane % 2 == 0) // vehicles moving to the right
 	{
 		position.x = -truckWidth + ordinalNumber * (gameAxisWidth / 3)
-				+ (rand() % 200 - 100)/160;
+				+ (rand() % 200 - 100) / 160;
 	}
 	else // vehicles moving to the left
 	{
 		position.x = gameAxisWidth + truckWidth
-				- ordinalNumber * (gameAxisWidth / 3) + (rand() % 200 - 100)/160;
+				- ordinalNumber * (gameAxisWidth / 3)
+				+ (rand() % 200 - 100) / 160;
 	}
 }
 
-void Vehicle::SetSpeed(float speedScaleFactor){
-	speed=speed*speedScaleFactor;
+void Vehicle::SetSpeed(float speedScaleFactor)
+{
+	speed = speed * speedScaleFactor;
 }
 
 void Vehicle::SetSpawnPos()
@@ -126,7 +128,6 @@ int Vehicle::IsInTerrain()
 
 Vehicle::~Vehicle()
 {
-	// TODO Auto-generated destructor stub
 }
 
 }

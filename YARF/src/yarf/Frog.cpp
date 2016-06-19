@@ -75,6 +75,5 @@ int Frog::MoveToDirection(int direction)
 }
 
 Frog::~Frog(){
-	std::cout << "Frog.~Frog():\tDestroyed a Frog object. [DIRECT]" << std::endl;
 }
 }

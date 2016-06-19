@@ -9,12 +9,9 @@
 
 Projectile::Projectile()
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 Projectile::~Projectile()
 {
-	// TODO Auto-generated destructor stub
 }
 

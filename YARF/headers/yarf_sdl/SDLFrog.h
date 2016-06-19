@@ -23,7 +23,7 @@ class SDLFrog: public yarf::Frog
 {
 public:
 	SDLFrog(SDL_Renderer * Renderer, SDL_Texture * Texture,
-			SDL_Rect & m_windowRect, int window_width, int window_height, float &width_scale_factor,
+			SDL_Rect & m_windowRect, float &width_scale_factor,
 			float &height_scale_factor, list<yarf::Bullet *> &bullet_list);
 	void Vis(int direction, int leaping, const int & FPS);
 	void LeapVis(int & direction);
@@ -33,13 +33,13 @@ public:
 	virtual ~SDLFrog();
 
 private:
-	SDL_Texture * m_pTexture = 0;
+	SDL_Texture * pTexture = 0;
 	SDL_Rect frogSrcRect; 				// source rectangle
 	SDL_Rect frogDestRect;				// visualisation destination rectangle
 	Rect hitRect; 						// frogDestRect used to pass by reference to bullets
 	SDL_Rect pWindowRect;				// window pointer will be assigned through constructor
 	SDL_Point frogRotatePoint;
-	SDL_Renderer * m_pRenderer = 0;		// renderer pointer will be assigned through constructor
+	SDL_Renderer * pRenderer = 0;		// renderer pointer will be assigned through constructor
 
 	int frogSrcX = 0;					// non-leap Frog coords on the texture
 	int frogSrcY = 120;
@@ -48,8 +48,6 @@ private:
 	double frogSrcWidth = 41;
 	double frogSrcHeight = 46;
 
-	double windowWidth;
-	double windowHeight;
 	float *widthScaleFactor;
 	float *heightScaleFactor;
 
@@ -57,7 +55,7 @@ private:
 	int leaping = 0;
 
 	yarf::Bullet * Bullet = 0;
-	list<yarf::Bullet *> *m_bulletList;
+	list<yarf::Bullet *> *bulletList;
 };
 }
 #endif /* SRC_SDLFROG_H_ */
