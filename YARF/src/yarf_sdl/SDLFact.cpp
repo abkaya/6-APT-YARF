@@ -16,6 +16,19 @@ namespace yarf_sdl
 SDLFact::SDLFact() :
 		FPS(60)
 {
+	/*Initialise TTF*/
+	//Initialise SDL_ttf -- and only initialise it once.
+	//SDL doesn't have to be initialised yet
+	if (!TTF_WasInit())
+	{
+		if (TTF_Init() == -1)
+		{
+			std::cout << "SDL_ttf could not initialize! SDL_ttf Error: "
+					<< TTF_GetError() << std::endl;
+
+		}
+	}
+
 	//Initialisation of the window happens here
 	if (Init("YARF | Yet Another Reckless Frog", SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE))
@@ -80,11 +93,56 @@ bool SDLFact::Init(const char * title, int xpos, int ypos, int height,
 // Create the Textures needed. Only call this function after the Renderer is created in the Init() function
 void SDLFact::InitTextures()
 {
-
 	pTempSurface = IMG_Load(".\\gamesprite.png");
 	pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
-	pTempSurface = IMG_Load(".\\frogsrusicon.png");
+	pTempSurface = IMG_Load(".\\yarficon.png");
 	SDL_SetWindowIcon(pWindow, pTempSurface);
+	SDL_FreeSurface(pTempSurface);
+
+	//Create text textures ("health: ammo: score:" and 0,1,2,3,4,5,6,7,8,9)
+	font = TTF_OpenFont(".\\sans.ttf", 23); //this opens a font style and sets a size
+	orange.r = 255;
+	orange.g = 165;
+	orange.b = 0;
+	orange.a = 255;
+
+	green.r = 54;
+	green.g = 196;
+	green.b = 35;
+	green.a = 255;
+
+	for (int i = 0; i < 11; i++)
+	{
+		if (i == 10)
+			fontColor = orange;
+		else
+			fontColor = green;
+		textSurface = TTF_RenderText_Solid(font, sMessage.c_str(), fontColor);
+		if (textSurface == NULL)
+		{
+			std::cout << "Unable to render text surface! SDL_ttf Error: "
+					<< TTF_GetError() << std::endl;
+		}
+		else
+		{
+			//Create texture from surface pixels
+			textTexture = SDL_CreateTextureFromSurface(pRenderer, textSurface);
+			if (textTexture == 0)
+			{
+				std::cout
+						<< "Unable to create text from rendered surface! SDL_ttf Error: "
+						<< TTF_GetError() << std::endl;
+			}
+			else
+			{
+				textRect.w = textSurface->w * widthScaleFactor;
+				textRect.h = textSurface->h;
+			}
+
+			//Get rid of old surface
+			SDL_FreeSurface(textSurface);
+		}
+	}
 }
 
 yarf::Frog* SDLFact::CreateFrog(list<yarf::Bullet *> &bullet_list)
@@ -102,8 +160,8 @@ yarf::Vehicle* SDLFact::CreateVehicle(bool init_spawn, int lane,
 
 Terrain* SDLFact::CreateTerrain()
 {
-	return new SDLTerrain(pRenderer, pTexture, WIDTH, HEIGHT, heightScaleFactor,
-			widthScaleFactor);
+	return new SDLTerrain(pRenderer, pTexture, WIDTH, HEIGHT - scorebarHeight,
+			heightScaleFactor, widthScaleFactor);
 }
 
 bool SDLFact::IsRunning()
@@ -138,7 +196,8 @@ void SDLFact::RenderClear()
 	TerrainF->Vis();
 }
 
-void SDLFact::RenderPresent(){
+void SDLFact::RenderPresent()
+{
 	// show the window
 	SDL_RenderPresent(pRenderer);
 }
@@ -216,13 +275,114 @@ void SDLFact::Resize()
 	SDL_SetWindowSize(pWindow, WIDTH, HEIGHT);
 	//changing the scale factors here suffices.
 	widthScaleFactor = static_cast<float>(WIDTH) / 640;
-	heightScaleFactor = static_cast<float>(HEIGHT) / 480;
+	heightScaleFactor = static_cast<float>(HEIGHT - scorebarHeight) / 480;
 	delete (TerrainF);
 	TerrainF = CreateTerrain();
 
+	//update widthscale dependent values
+	healthDstX=90*widthScaleFactor;
+	ammoDstX=295*widthScaleFactor;
+	scoreDstX=490*widthScaleFactor;
 }
 
-void SDLFact::Stop(){
+void SDLFact::RenderText()
+{
+	//
+	textRect.x = 10 * widthScaleFactor;
+	textRect.y = HEIGHT - 30;
+	textRect.w = 480 * widthScaleFactor;
+	textRect.h = scorebarHeight;
+
+	SDL_RenderCopy(pRenderer, textTexture, NULL, &textRect);
+
+	//renderScores()
+	//this takes in 3 integers: values of
+}
+
+void SDLFact::RenderGameStats(int health, int ammo, int score)
+{
+	/*Workflow to make this happen
+	 * 1. Find the lengths of the numbers
+	 * 2. Place these numbers in an array and use the lengths to
+	 * 	  place zeroes in the higher digits where necessary
+	 * 3. With the numbers placed at 17pixels from each other
+	 *    on the sprite sheet, it's convenient to scroll through the
+	 *    number we want, by multiplying the x-coord with the numWidth(=17)
+	 * 4. Once both the satisfactory SDLRect (source and dest) are achieved,
+	 *
+	 * 	  RENDER!
+	 *
+	 **/
+	//get the number of digits of the numbers to display
+	healthLength = GetNumberOfDigits(health);
+	ammoLength = GetNumberOfDigits(ammo);
+	scoreLength = GetNumberOfDigits(score);
+	tempHealth=health;
+	tempAmmo=ammo;
+	tempScore=score;
+
+	//place them in the arrays. (e.g. value 123 becomes {0,0,1,2,3}
+	//health array
+	for (int j = 4; j >= 0; j--)
+	{
+		if(healthLength>j+5)
+			healthArr[j]=0;
+		else
+			healthArr[j] = tempHealth % 10;
+		tempHealth /= 10;
+	}
+	//ammo array
+	for (int j = 4; j >= 0; j--)
+	{
+		if(ammoLength>j+5)
+			ammoArr[j]=0;
+		else
+			ammoArr[j] = tempAmmo % 10;
+		tempAmmo /= 10;
+	}
+	//score array
+	for (int j = 4; j >= 0; j--)
+	{
+		if(scoreLength>j+5)
+			scoreArr[j]=0;
+		else
+			scoreArr[j] = tempScore % 10;
+		tempScore /= 10;
+	}
+
+	RenderDigits(healthArr,healthDstX);
+	RenderDigits(ammoArr,ammoDstX);
+	RenderDigits(scoreArr,scoreDstX);
+}
+
+void SDLFact::RenderDigits(int numArray[], int startX){
+	for(int i=0;i<5;i++){
+		numSrcRect.x=numWidth*numArray[i];
+		numSrcRect.y=numSrcY;
+		numSrcRect.w=numWidth;
+		numSrcRect.h=numHeight;
+		numDstRect.x=startX+numWidth*widthScaleFactor*i;
+		numDstRect.y=HEIGHT-30;
+		numDstRect.w=numWidth*widthScaleFactor;
+		numDstRect.h=numHeight;
+
+		SDL_RenderCopy(pRenderer,pTexture,&numSrcRect,&numDstRect);
+	}
+}
+
+int SDLFact::GetNumberOfDigits(int number)
+{
+	int length = 0;
+	do
+	{
+		++length;
+		number /= 10;
+	} while (number);
+	return length;
+}
+
+void SDLFact::Stop()
+{
 	SDL_DestroyRenderer(pRenderer);
 	SDL_DestroyWindow(pWindow);
 	SDL_Quit();

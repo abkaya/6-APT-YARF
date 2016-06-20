@@ -41,6 +41,10 @@ class Fact
         virtual bool IsRunning()=0;					//Visualisation running?
         virtual int GetTicks()=0;					//SDL ticks
         virtual void Delay(int delay_time)=0;		//Used for Ticks Per Second (TPS), which is in our case equal to FPS
+        virtual void RenderText()=0;
+        virtual void RenderGameStats(int health, int ammo, int score)=0;
+        virtual int GetNumberOfDigits(int number)=0;
+        virtual void RenderDigits(int numArray[], int startX)=0;
         virtual void Stop()=0;
         virtual ~Fact();
 };

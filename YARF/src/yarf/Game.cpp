@@ -19,38 +19,26 @@ Game::Game(Fact * factory) :
 }
 void Game::Start()
 {
-	cout << "Game.Start():\tGame started with a pass by reference Factory F."
-			<< endl;
-
-	// It's important to create the Window before Creating any other entity, because that'll
-	// lead to nullpointer Windows/Renderer whilst using these to display other entities
-
-	cout
-			<< "Game.Start():\tWindow has been called through the Abstract Factory F.\n\t\tThis code has no idea whether SDL or another library is being used."
-			<< endl;
-
-	if(F->IsRunning())
+	if (F->IsRunning())				//Initialise the game if the factory is ready
 		InitEntities();
 	while (F->IsRunning())
 	{
-		m_frameStart = F->GetTicks();
+		tickstartStart = F->GetTicks();
 
-		// Events will be caught within (1000/FPS)ms
+		// Events will be caught within (1000/TPS)ms
 		Update();
-
-		// The time needed to execute the 3 previous functions is taken into consideration
-		// when calculating the appropriate delay in order to reach the aimed FPS
-		m_frameTime = F->GetTicks() - m_frameStart;
-		if (m_frameTime < DELAY_TIME)
+		// The time needed to execute the functions is taken into account
+		// when calculating the appropriate delay in order to reach the aimed TPS
+		tickTime = F->GetTicks() - tickstartStart;
+		if (tickTime < DELAY_TIME)
 		{
-			F->Delay((int) (DELAY_TIME - m_frameTime));
+			F->Delay((int) (DELAY_TIME - tickTime));
 		}
 	}
-	F->Resize();
-	// WindowF->Close(); << Do NOT call this from Game. SDLWindow can handle it internally. Consider removing the function
+	F->Stop();
 }
 
-// Most of the Entities need the renderer, so it makes sense to initialise entities
+// Entities need
 // after the renderer has initialised succesfully
 // We will check on that, using F->IsRunning()
 void Game::InitEntities()
@@ -65,7 +53,6 @@ void Game::InitEntities()
 	//We need a way to denote the ordinal number
 	//"this is the n'th vehicle on this lane"
 	//We want 3 vehicles on each lane by default.
-	//there are 8 lanes, for any gives Width or Height of the window.
 
 	//spawn 1 vehicle on each lane, then continue doing so, but moving on the
 	//x-scale by moving the ordinalnumber up.
@@ -91,50 +78,64 @@ void Game::Update()
 	IsVehicleInTerrain();
 	IsBulletInTerrain();
 	ManageVehicleNumber();
-		UpdateFrogStates();
+	UpdateFrogStates();
 	F->RenderClear();
+	F->RenderText();
+	F->RenderGameStats(health, ammo, score);
 	FrogF->MoveToDirection(m_direction);
 	FrogF->Vis(m_direction, m_leaping, TPS);
-
 	for (vehicle_it_1 = vehicle_list.begin();
 			vehicle_it_1 != vehicle_list.end(); ++vehicle_it_1)
 	{
 		(*vehicle_it_1)->Vis(TPS);
 		(*vehicle_it_1)->Move();
 	}
+	F->RenderText();
 	F->RenderPresent();
 }
 
 void Game::UpdateFrogStates()
 {
-	FrogStates = F->GetFrogStates();
-	m_direction = FrogStates.x;
-	m_leaping = FrogStates.y;
-	switch ((int)(FrogStates.w))
+	frogStates = F->GetFrogStates();
+	m_direction = frogStates.x;
+	m_leaping = frogStates.y;
+	switch ((int) (frogStates.w))
 	{
 	case 1:
-		FrogF->CreateBullet();		//red bullet
+		if (ammo >= 1)
+		{
+			FrogF->CreateBullet();		//red bullet
+			ammo -= 1;
+		}
 		break;
 	case 4:
 		m_theta = 0;
-		for (m_theta = 0; m_theta < 360; m_theta = m_theta + 10) //electric bullet every 10°
+		if (ammo >= 36)
 		{
-			//"4" is the bullet/frog direction parameter, this time used to denote the electric bullet type
-			FrogF->CreateBullet(4, m_theta);
+			for (m_theta = 0; m_theta < 360; m_theta = m_theta + 10) //electric bullet every 10°
+			{
+				//"4" is the bullet/frog direction parameter, this time used to denote the electric bullet type
+				FrogF->CreateBullet(4, m_theta);
+			}
+			ammo -= 36;
 		}
+
 		break;
 	case 5:
 		m_theta = 0;
-		for (m_theta = 0; m_theta < 360; m_theta = m_theta + 36) //forceshield bullet every 36°
+		if (ammo >= 10)
 		{
-			//"5" is the bullet/frog direction parameter, this time used to denote the green defence bullet type
-			FrogF->CreateBullet(5, m_theta);
+			for (m_theta = 0; m_theta < 360; m_theta = m_theta + 36) //forceshield bullet every 36°
+			{
+				//"5" is the bullet/frog direction parameter, this time used to denote the green defence bullet type
+				FrogF->CreateBullet(5, m_theta);
+			}
+			ammo -= 10;
 		}
 		break;
 	default:
 		break;
 	}
-
 
 }
 
@@ -158,7 +159,15 @@ void Game::DetectCollision()
 
 		if (leftA < rightB && rightA > leftB && topA < bottomB
 				&& bottomA > topB)
+		{
 			FrogF->Kill();
+			health--;
+			if (health < 1)
+			{
+				Restart();
+			}
+
+		}
 	}
 }
 
@@ -289,7 +298,6 @@ void Game::BulletVehicleCollision()
 					bullet_list.remove(bullet);
 					collided = true;
 					score += 10;
-					cout << "Score: " << score << endl;
 				}
 			}
 		}
@@ -314,24 +322,33 @@ void Game::IsBulletInTerrain()
 void Game::Stop()
 {
 	//Deleting the bullets first
-	 for (auto* bullet : bullet_list)
-	 {
-	 delete (bullet);
-	 bullet_list.remove(bullet);
-	 }
+	for (auto* bullet : bullet_list)
+	{
+		delete (bullet);
+		bullet_list.remove(bullet);
+	}
 
-	 //Delete all vehicles
-	 for (auto* vehicle : vehicle_list)
-	 {
-	 delete (vehicle);
-	 vehicle_list.remove(vehicle);
-	 }
+	//Delete all vehicles
+	for (auto* vehicle : vehicle_list)
+	{
+		delete (vehicle);
+		vehicle_list.remove(vehicle);
+	}
 
-	 //Delete the Frog
-	 delete (FrogF);
+	//Delete the Frog
+	delete (FrogF);
 
-	 //Call for the SDL Renderer and Window to be Deleted
+	//Call for the SDL Renderer and Window to be Deleted
 
+}
+
+void Game::Restart()
+{
+	Stop();
+	InitEntities();
+	ammo = 99999;
+	health = 10;
+	score = 0;
 }
 Game::~Game()
 {

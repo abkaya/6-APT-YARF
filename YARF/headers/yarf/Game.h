@@ -8,7 +8,7 @@
 #ifndef SRC_GAME_H_
 #define SRC_GAME_H_
 #include "Fact.h"
-//for random function and seeding it with ctime
+//for the random() function and seeding it with ctime
 #include <cstdlib>
 #include <ctime>
 
@@ -20,8 +20,7 @@ public:
 	Game(Fact*);
 	void Start();
 	void Stop();
-	void Update();				//will used as an update game function
-								//old render has to stay though
+	void Update();
 	void InitEntities();
 	void IsVehicleInTerrain();
 	void IsBulletInTerrain();
@@ -32,6 +31,7 @@ public:
 	void ManageVehicleNumber();
 	void SpawnVehicle(int lane);
 	void UpdateFrogStates();
+	void Restart();
 	~Game();
 private:
 	yarf::Fact* F = nullptr;
@@ -39,14 +39,11 @@ private:
 
 	const int TPS;
 	const double DELAY_TIME = 1000 / TPS;
-	double m_frameStart = 0;
-	double m_frameTime = 0;
-
-	//collision detection left and right
+	double tickstartStart = 0;
+	double tickTime = 0;
 	float leftA = 0, rightA = 0, leftB = 0, rightB = 0, bottomA = 0, topA = 0,
 			bottomB = 0, topB = 0;
-
-	bool m_spawnAvailable = false;
+	bool spawnAvailable = false;
 
 	list<yarf::Bullet *> bullet_list;
 	list<yarf::Bullet *>::iterator bullet_it;
@@ -60,8 +57,12 @@ private:
 
 	//int m_tempDir;
 	int m_theta = 0;
+
+	Rect frogStates; //x=direction, y=leaping, w= shooting(1(red), 4(blue), 5(green)), h=unused)
 	int score = 0;
-	Rect FrogStates; //x=direction, y=leaping, w= shooting(1(red), 4(blue), 5(green)), h=unused)
+	int health=10;
+	int ammo=99999;	//red bullet costs 1
+					//blue bullet costs
 
 	int m_direction = 0;
 	int m_leaping = 0;

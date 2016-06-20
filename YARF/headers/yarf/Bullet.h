@@ -30,7 +30,7 @@ protected:
 	float initTheta=0; //used to sway between theta degrees.
 	float degreeSway=1;
 	float clockwise=1;
-	Rect *frogRect=nullptr;
+	Rect *frogRect;
 	Rect staticCoords;
 		// Rect to share
 	Rect returnRect;
