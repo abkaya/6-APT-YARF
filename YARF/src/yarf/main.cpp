@@ -30,7 +30,7 @@ using namespace std;
 int main(int argc, char * args[])
 {
 	yarf::Fact * F = new yarf_sdl::SDLFact();
-	yarf::Game * G= new yarf::Game(F);
+	yarf::Game * G = new yarf::Game(F);
 	G->Start();
 	G->Stop();
 	delete(F);
