@@ -8,7 +8,7 @@
 </object>
 
 <div id="pdf">
-  <object width="400" height="500" type="application/pdf" data="yarf-slides-handouts_red.pdf?#zoom=85&scrollbar=0&toolbar=0&navpanes=0" id="pdf_content">
+  <object width="400" height="500" type="application/pdf" data="./yarf-slides-handouts_red.pdf" id="pdf_content">
     <p>Please download the PDF to view the YARF handouts.</p>
   </object>
 </div>
