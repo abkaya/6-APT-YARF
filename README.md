@@ -12,3 +12,5 @@
     <p>Please download the PDF to view the YARF handouts.</p>
   </object>
 </div>
+
+[embed]https://github.com/abkaya/6-APT-YARF/raw/master/yarf-slides[/embed]
