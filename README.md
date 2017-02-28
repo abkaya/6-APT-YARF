@@ -13,4 +13,6 @@
   </object>
 </div>
 
-[embed]https://github.com/abkaya/6-APT-YARF/raw/master/yarf-slides[/embed]
+[embed]https://github.com/abkaya/6-APT-YARF/raw/master/yarf-slides.pdf[/embed]
+
+[Intro.pdf](https://github.com/abkaya/6-APT-YARF/raw/master/yarf-slides.pdf)
